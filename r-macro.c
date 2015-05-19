@@ -21,16 +21,14 @@
 
 #include "r-macro.h"
 
-//RM_CHAR *_macro(RM_CHAR **, RM_CHAR, REP_MACRO_FUNC, void *, unsigned int, RM_CHAR **);
+//  RM_CHAR *_macro( RM_CHAR **, RM_CHAR, REP_MACRO_FUNC,
+//                   void *, unsigned int, RM_CHAR **);
 
 /*   MAIN   */
 /*************************************/
 RM_CHAR *_macro(RM_CHAR **instr,
-        RM_CHAR _al_sep,
-        REP_MACRO_FUNC _al_func,
-        void *_al_par,
-        unsigned int flags,
-        RM_CHAR **parent_macros)
+        RM_CHAR _al_sep, REP_MACRO_FUNC _al_func,
+        void *_al_par, unsigned int flags, RM_CHAR **parent_macros)
 {
 
 #define INCMACI maci += (maci < MACROS_BUFFER_LEN_-1)
@@ -130,7 +128,7 @@ __lets_begin:
 #endif
 
 #ifdef MACROS_ALLOW_SUBMACRO
-            if ( (*in == _al_sep) && (flags & REP_ENABLE_SUBMACRO) && !brak){
+            if ( (*in == _al_sep) && (flags & REP_ENABLE_SUBMACRO) && !brak ) {
 
 #ifdef   MACROS_SUBSTR_START //----+
                 bmacro = macro; // |
@@ -264,8 +262,10 @@ __lets_begin:
                             INCMACI;
                             continue;
 
-#ifdef MACROS_PARAM_BRACKET_CLOSE                           // if end-symbol defined
-#if (MACROS_PARAM_BRACKET_CLOSE != MACROS_PARAM_BRACKET)    // if end-symbol!=begin-sym
+#ifdef MACROS_PARAM_BRACKET_CLOSE                           // if end-symbol
+                                                            // defined
+#if (MACROS_PARAM_BRACKET_CLOSE != MACROS_PARAM_BRACKET)    // if end-symbol !=
+                                                            // begin-sym
                         case MACROS_PARAM_BRACKET_CLOSE:
                             mac_str[maci] = MACROS_PARAM_BRACKET_CLOSE;
                             INCMACI;
@@ -384,8 +384,9 @@ __proc_base:
 #endif
                         default: // undefined char;
 #ifdef   MACROS_ESCAPE_REP_START
-                            mac_str[maci] = ( (escape == escape_rep) ?
-                                            MACROS_ESCAPE_REP_START : MACROS_ESCAPE);
+                            mac_str[maci] = ( (escape == escape_rep)
+                                              ? MACROS_ESCAPE_REP_START
+                                              : MACROS_ESCAPE);
 #else
                             mac_str[maci] = MACROS_ESCAPE;
 
@@ -401,7 +402,7 @@ __proc_base:
             } // END Switch 001
 
 #ifdef   MACROS_ESCAPE_REP_START
-            if( (escape == escape_cont) || (escape == escape_cont_rep)){
+            if( (escape == escape_cont) || (escape == escape_cont_rep)) {
 #else
             if( escape == escape_cont ){
 #endif
@@ -454,10 +455,13 @@ __char_notdef:
 #ifdef MACROS_SUBSTR_START
                             switch (macro){
                                 case macro_no:
-                                    if( (&mac_str[maci]) > macros[pari-1] ){
+                                    if( (&mac_str[maci]) > macros[pari-1] ) {
                                         cur_val = mac_str[maci-1];
-                                        for (val = val <= MACROS_MAX_REP ? val
-                                                        : MACROS_MAX_REP; val>1; val--) {
+                                        for (val = val <= MACROS_MAX_REP
+                                                 ? val
+                                                 : MACROS_MAX_REP;
+                                             val > 1; val--)
+                                        {
                                             mac_str[maci] = (RM_CHAR)(cur_val);
                                             INCMACI;
                                         }
@@ -465,12 +469,14 @@ __char_notdef:
                                     break; // switch (st)
                                 case macro_sub_stop:
                                     macro = macro_no;
-                                    for (val = val <= MACROS_MAX_REP ? val
-                                                    : MACROS_MAX_REP; val>1; val--) {
+                                    for (val = val <= MACROS_MAX_REP
+                                             ? val
+                                             : MACROS_MAX_REP; val>1; val--) {
                                         cur_val = rep_macro(stack, _al_sep,
-                                                &mac_str[maci], (int)(MACROS_BUFFER_LEN_ - maci),
-                                                flags & ~REP_INSTR_IS_POINTER,
-                                                _al_func, _al_par);
+                                            &mac_str[maci],
+                                            (int)(MACROS_BUFFER_LEN_ - maci),
+                                            flags & ~REP_INSTR_IS_POINTER,
+                                            _al_func, _al_par);
                                         maci += cur_val;
                                     }
                                 default:
@@ -479,7 +485,10 @@ __char_notdef:
 #else
                             if( (&mac_str[maci]) > macros[pari-1] ){
                                 cur_val = mac_str[maci-1];
-                                for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                                for (val = val <= MACROS_MAX_REP
+                                         ? val
+                                         : MACROS_MAX_REP; val>1; val--)
+                                {
                                     mac_str[maci] = (RM_CHAR)(cur_val);
                                     INCMACI;
                                 }
@@ -629,11 +638,13 @@ __post_esc:
                         flags,
                         macros)) != 0){ // call SELF
 #ifdef MACROS_ALLOW_SUBMACRO
-                            if ( (flags & REP_ENABLE_SUBMACRO) && (backi < MACROS_BACKUP_COUNT_-1)){
-                                if (back[backi]){
+                            if ( (flags & REP_ENABLE_SUBMACRO) &&
+                                 (backi < MACROS_BACKUP_COUNT_-1) ) {
+                                if (back[backi]) {
                                     INCBACKI;
                                 }
-                                back[backi] = (in + (*in != MACROS_END_OF_LINE));
+                                back[backi] = (in +
+                                              (*in != MACROS_END_OF_LINE));
 //                              back = in + (*in != MACROS_END_OF_LINE);
                                 in = mc;
 #ifdef  MACROS_SUBSTR_START
@@ -645,14 +656,14 @@ __post_esc:
                                 goto __lets_begin;
                             } else {
                                 in += (*in!=0);
-                                for (; *mc && maci < MACROS_BUFFER_LEN_; mc++){
+                                for (; *mc && maci < MACROS_BUFFER_LEN_; mc++) {
                                     mac_str[maci] = *mc;
                                     INCMACI;
                                 }
                             }
 #else
                             in += (*in!=0);
-                            for (; *mc && maci < MACROS_BUFFER_LEN_; mc++){
+                            for (; *mc && maci < MACROS_BUFFER_LEN_; mc++) {
                                 mac_str[maci] = *mc;
                                 INCMACI;
                             }
@@ -855,17 +866,24 @@ __default_char:                         // <----------+
                             break;
                         case escape_cont_rep:
                             if (stack){
-                                for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                                for (val = val <= MACROS_MAX_REP
+                                         ? val
+                                         : MACROS_MAX_REP; val>1; val--)
+                                {
                                     cur_val = rep_macro(stack, _al_sep,
-                                            &mac_str[maci], (int)(MACROS_BUFFER_LEN_ - maci),
+                                            &mac_str[maci],
+                                            (int)(MACROS_BUFFER_LEN_ - maci),
                                             flags & ~REP_INSTR_IS_POINTER,
                                             _al_func, _al_par);
                                     maci += cur_val;
                                 }
                             } else {
-                                if( (&mac_str[maci]) > macros[pari-1] ){
+                                if( (&mac_str[maci]) > macros[pari-1] ) {
                                     cur_val = mac_str[maci-1];
-                                    for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                                    for (val = val <= MACROS_MAX_REP
+                                             ? val
+                                             : MACROS_MAX_REP; val>1; val--)
+                                    {
                                         mac_str[maci] = (RM_CHAR)(cur_val);
                                         INCMACI;
                                     }
@@ -975,7 +993,9 @@ close_def:
                 case macro_no:
                     if( (&mac_str[maci]) > macros[pari-1] ){
                         cur_val = mac_str[maci-1];
-                        for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                        for (val = val <= MACROS_MAX_REP
+                                 ? val : MACROS_MAX_REP; val>1; val--)
+                        {
                             mac_str[maci] = (RM_CHAR)(cur_val);
                             INCMACI;
                         }
@@ -984,9 +1004,12 @@ close_def:
 
                 case macro_sub_stop:
                     macro = macro_no;
-                    for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                    for (val = val <= MACROS_MAX_REP
+                             ? val : MACROS_MAX_REP; val>1; val--)
+                    {
                         cur_val = rep_macro(stack, _al_sep,
-                                  &mac_str[maci], (int)(MACROS_BUFFER_LEN_ - maci),
+                                  &mac_str[maci],
+                                  (int)(MACROS_BUFFER_LEN_ - maci),
                                   flags & ~REP_INSTR_IS_POINTER,
                                   _al_func, _al_par);
                         maci += cur_val;
@@ -998,7 +1021,10 @@ close_def:
 #else
             if( (&mac_str[maci]) > macros[pari-1] ){
                 cur_val = mac_str[maci-1];
-                for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                for (val = val <= MACROS_MAX_REP
+                         ? val
+                         : MACROS_MAX_REP; val>1; val--)
+                {
                     mac_str[maci] = (RM_CHAR)(cur_val);
                     INCMACI;
                 }
@@ -1100,7 +1126,9 @@ register unsigned int cur_val = 0;
     back[0] = 0;
 #endif
 
-    inc = (flags & REP_INSTR_IS_POINTER) ? *(RM_CHAR **)instr : (RM_CHAR *)instr;
+    inc = (flags & REP_INSTR_IS_POINTER)
+        ? *(RM_CHAR **)instr
+        : (RM_CHAR *)instr;
 #ifdef   MACROS_SUBSTR_START
     bst = macro_no;
     stack = 0;
@@ -1124,7 +1152,7 @@ rm_lets_begin:
 #ifdef   MACROS_SUBSTR_START
            if(st != macro_start && st != macro_substr){
 #ifdef MACROS_ALLOW_SUBMACRO
-                if ( (*inc == _al_sep) && (flags & REP_ENABLE_SUBMACRO)){
+                if ( (*inc == _al_sep) && (flags & REP_ENABLE_SUBMACRO)) {
                     bst = st;
                     st = macro_start;
                     continue;
@@ -1135,7 +1163,7 @@ rm_lets_begin:
 
            if(st == macro_no){
 #ifdef MACROS_ALLOW_SUBMACRO
-                if ( (*inc == _al_sep) && (flags & REP_ENABLE_SUBMACRO)){
+                if ( (*inc == _al_sep) && (flags & REP_ENABLE_SUBMACRO)) {
                     st = macro_start;
                     continue;
                 }
@@ -1226,13 +1254,16 @@ rm_lets_begin:
 #endif
                         {
 #ifdef MACROS_ALLOW_SUBMACRO  // (@@)
-                        if ( !(flags & REP_ENABLE_SUBMACRO) && (*inc == _al_sep)){
+                        if ( !(flags & REP_ENABLE_SUBMACRO) &&
+                              (*inc == _al_sep) )
+                        {
 #else  // MACROS_ALLOW_SUBMACRO (@@)
-                        if (*inc == _al_sep){
+                        if (*inc == _al_sep) {
 #endif
 #ifdef   MACROS_ESCAPE_REP_START
-                            *outc = ( (escape == escape_rep) ?
-                                        MACROS_ESCAPE_REP_START : MACROS_ESCAPE);
+                            *outc = ( (escape == escape_rep)
+                                      ? MACROS_ESCAPE_REP_START
+                                      : MACROS_ESCAPE);
 #else
                             *outc = MACROS_ESCAPE;
 #endif
@@ -1289,7 +1320,9 @@ rm_lets_begin:
                                 val = *inc - RM_T('0');
 rm_proc_base:
 #ifdef MACROS_ESCAPE_REP_START
-                                escape = (escape == escape_rep ? escape_cont_rep : escape_cont);
+                                escape = (escape == escape_rep
+                                                  ? escape_cont_rep
+                                                  : escape_cont);
 #else
                                 escape = escape_cont;
 #endif
@@ -1334,8 +1367,9 @@ rm_proc_base:
                             default:
 
 #ifdef   MACROS_ESCAPE_REP_START
-                                *outc = ( (escape == escape_rep) ?
-                                        MACROS_ESCAPE_REP_START : MACROS_ESCAPE);
+                                *outc = ( (escape == escape_rep)
+                                           ? MACROS_ESCAPE_REP_START
+                                           : MACROS_ESCAPE );
 #else
                                 *outc = MACROS_ESCAPE;
 
@@ -1351,7 +1385,7 @@ rm_proc_base:
                             break;
                 } // SWITCH(escape)
 #ifdef   MACROS_ESCAPE_REP_START
-                if( (escape == escape_cont) || (escape == escape_cont_rep)){
+                if( (escape == escape_cont) || (escape == escape_cont_rep)) {
 #else
                 if( escape == escape_cont ){
 #endif
@@ -1408,7 +1442,11 @@ rm_char_notdef:
                                     case macro_no:
                                         if(outc > outstr){
                                             cur_val = *(outc-1);
-                                            for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                                            for (val = val <= MACROS_MAX_REP
+                                                     ? val
+                                                     : MACROS_MAX_REP;
+                                                 val>1; val--)
+                                            {
                                                 *outc = (RM_CHAR)(cur_val);
                                                 INCOUT;
                                             }
@@ -1416,11 +1454,16 @@ rm_char_notdef:
                                         break; // switch (st)
                                     case macro_sub_stop:
                                         st = macro_no;
-                                        for (val = ((val <= MACROS_MAX_REP) ? val : MACROS_MAX_REP); val>1; val--){
+                                        for (val = ((val <= MACROS_MAX_REP)
+                                                 ? val
+                                                 : MACROS_MAX_REP);
+                                             val>1; val--)
+                                        {
                                             cur_val = rep_macro(stack, _al_sep,
-                                                      outc, (int)(outlen - (outc - outstr)),
-                                                      flags & ~REP_INSTR_IS_POINTER,
-                                                      _al_func, _al_par);
+                                                outc,
+                                                (int)(outlen - (outc - outstr)),
+                                                flags & ~REP_INSTR_IS_POINTER,
+                                                _al_func, _al_par );
                                             outc += cur_val;
                                         }
                                         stack = 0;
@@ -1431,7 +1474,11 @@ rm_char_notdef:
 #else
                                 if(outc > outstr){
                                     cur_val = *(outc-1);
-                                    for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                                    for (val = val <= MACROS_MAX_REP
+                                             ? val
+                                             : MACROS_MAX_REP;
+                                         val>1; val--)
+                                    {
                                         *outc = (RM_CHAR)(cur_val);
                                         INCOUT;
                                     }
@@ -1502,11 +1549,11 @@ rm_proc_escape_stop:
                     case macro_sub_stop:
                         stack = 0;
                         st = macro_no;
-                    case macro_no:  //      proof symbol "!s!d!f!s!d!f! %test(dfsd .. dfsd ..)"
+                    case macro_no:  //      proof symbol "!s %test(dfsd .)"
                         *outc = *inc;   //
                         INCOUT;
                         break;
-                    case macro_start:   // MACROS found :) sdfsdf %!test(dfsd .. dfsd ..)
+                    case macro_start:   // MACROS found :) sdfsdf %!test(dfsd .)
 /*  CALL _macro */
                         if( (mc = _macro(&inc,
                                   _al_sep,
@@ -1515,11 +1562,14 @@ rm_proc_escape_stop:
                                   flags | REP_MACROS_WITH_BUFFER,
                                   0)) != 0) {
 #ifdef MACROS_ALLOW_SUBMACRO
-                            if ( (flags & REP_ENABLE_SUBMACRO) && (backi < MACROS_BACKUP_COUNT_-1)){
+                            if ( (flags & REP_ENABLE_SUBMACRO) &&
+                                 (backi < MACROS_BACKUP_COUNT_-1))
+                            {
                                 if (back[backi]){
                                     INCBACKI;
                                 }
-                                back[backi] = (inc + (*inc != MACROS_END_OF_LINE));
+                                back[backi] = (inc +
+                                              (*inc != MACROS_END_OF_LINE ) );
                                 inc = mc;
     //                          printf("fork!\n");
                                 st = bst;
@@ -1549,7 +1599,7 @@ rm_proc_escape_stop:
 
                 }
 #else
-                if(st == macro_start){ // MACROS found :) sdfsdf %!test(dfsd .. dfsd ..)
+                if(st == macro_start) { // MACROS found :) sdfsdf %!test(dfsd )
 /*  CALL _macro */
                     if( (mc = _macro(&inc,
                             _al_sep,
@@ -1558,7 +1608,9 @@ rm_proc_escape_stop:
                             flags | REP_MACROS_WITH_BUFFER,
                             0)) != 0){
 #ifdef MACROS_ALLOW_SUBMACRO
-                        if( (flags & REP_ENABLE_SUBMACRO) && (backi < MACROS_BACKUP_COUNT_-1)){
+                        if( (flags & REP_ENABLE_SUBMACRO) &&
+                            (backi < MACROS_BACKUP_COUNT_-1))
+                        {
                             if (back[backi]){
                                 INCBACKI;
                             }
@@ -1612,10 +1664,11 @@ rm_proc_escape_stop:
                         }
                         break;
                     case macro_sub_stop:
-                    case macro_no:  // first separator found "sdfsdf !%test(dfsd .. dfsd ..)"
+                    case macro_no:  // first separator found "sd !%test(dfsd )"
                         st = macro_start; //
                         break;
-                    case macro_start:   // separator after separator "sdfsdf %!%test(dfsd .. dfsd ..)"
+                    case macro_start:   // separator after separator
+                                        // "sf %!%test(dfsd .. dfsd ..)"
                         switch(escape){
                             case escape_slash:
                                 *outc = MACROS_ESCAPE;
@@ -1631,17 +1684,24 @@ rm_proc_escape_stop:
                                 break;
                             case escape_cont_rep:
                                 if(stack){
-                                    for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                                    for (val = val <= MACROS_MAX_REP
+                                             ? val
+                                             : MACROS_MAX_REP; val>1; val--)
+                                    {
                                         cur_val = rep_macro(stack, _al_sep,
-                                                  outc, (int)(outlen - (outc - outstr)),
-                                                  flags & ~REP_INSTR_IS_POINTER,
-                                                  _al_func, _al_par);
+                                              outc,
+                                              (int)(outlen - (outc - outstr)),
+                                              flags & ~REP_INSTR_IS_POINTER,
+                                              _al_func, _al_par);
                                         outc += cur_val;
                                     }
                                 } else {
                                     if(outc > outstr){
                                         cur_val = *(outc-1);
-                                        for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                                        for (val = val <= MACROS_MAX_REP
+                                                 ? val
+                                                 : MACROS_MAX_REP; val>1; val--)
+                                        {
                                             *outc = (RM_CHAR)(cur_val);
                                             INCOUT;
                                         }
@@ -1679,7 +1739,7 @@ rm_proc_escape_stop:
                             if(outc > outstr){
                                 cur_val = *(outc-1);
                                 for (val = val <= MACROS_MAX_REP ? val
-                                             : MACROS_MAX_REP; val>1; val--){
+                                             : MACROS_MAX_REP; val>1; val--) {
                                     *outc = (RM_CHAR)(cur_val);
                                     INCOUT;
                                 }
@@ -1725,7 +1785,10 @@ rm_proc_escape_stop:
                     case macro_no:
                         if(outc > outstr){
                             cur_val = *(outc-1);
-                            for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                            for (val = val <= MACROS_MAX_REP
+                                     ? val
+                                     : MACROS_MAX_REP; val>1; val--)
+                            {
                                 *outc = (RM_CHAR)(cur_val);
                                 INCOUT;
                             }
@@ -1733,7 +1796,10 @@ rm_proc_escape_stop:
                         break; // switch (st)
                     case macro_sub_stop:
                         st = macro_no;
-                        for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                        for (val = val <= MACROS_MAX_REP
+                                 ? val
+                                 : MACROS_MAX_REP; val>1; val--)
+                        {
                             cur_val = rep_macro(stack, _al_sep,
                                       outc, (int)(outlen - (outc - outstr)),
                                       flags & ~REP_INSTR_IS_POINTER,
@@ -1746,7 +1812,10 @@ rm_proc_escape_stop:
 #else
                 if(outc > outstr){
                     cur_val = *(outc-1);
-                    for (val = val <= MACROS_MAX_REP ? val : MACROS_MAX_REP; val>1; val--){
+                    for (val = val <= MACROS_MAX_REP
+                             ? val
+                             : MACROS_MAX_REP; val>1; val--)
+                    {
                         *outc = (RM_CHAR)(cur_val);
                         INCOUT;
                     }
@@ -1790,11 +1859,15 @@ do_without:
                     } else {
                         switch (*inc){
                             case MACROS_ESCAPE:
-                                escape = (escape == escape_slash ? escape_no : escape);
+                                escape = (escape == escape_slash
+                                                  ? escape_no
+                                                  : escape );
                                 break;
 #ifdef MACROS_SUBSTR_START
                             case MACROS_SUBSTR_STOP:
-                                if((flags & REP_ENABLE_REP) && (escape != escape_slash)){
+                                if( ( flags & REP_ENABLE_REP ) &&
+                                    ( escape != escape_slash ) )
+                                {
                                     goto exit;
                                 } else {
                                     escape = escape_no;
