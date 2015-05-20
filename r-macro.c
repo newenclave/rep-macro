@@ -26,9 +26,12 @@
 
 /*   MAIN   */
 /*************************************/
-RM_CHAR *_macro(RM_CHAR **instr,
-        RM_CHAR _al_sep, REP_MACRO_FUNC _al_func,
-        void *_al_par, unsigned int flags, RM_CHAR **parent_macros)
+RM_CHAR *_macro( RM_CHAR        **instr,
+                 RM_CHAR          al_sep,
+                 REP_MACRO_FUNC   al_func,
+                 void            *al_par,
+                 unsigned int     flags,
+                 RM_CHAR        **parent_macros )
 {
 
 #define INCMACI maci += (maci < MACROS_BUFFER_LEN_-1)
@@ -36,81 +39,81 @@ RM_CHAR *_macro(RM_CHAR **instr,
 #define INCBACKI (backi += (backi < (MACROS_BACKUP_COUNT_-1)))
 #define DECBACKI (backi -= (backi > 0))
 
-RM_CHAR *in, *mc;
+    RM_CHAR *in, *mc;
 
 #ifdef MACROS_ALLOW_SUBMACRO
-RM_CHAR *back[MACROS_BACKUP_COUNT_];
-unsigned int backi;
+    RM_CHAR *back[MACROS_BACKUP_COUNT_];
+    unsigned int backi;
 #endif
 
-RM_CHAR mac_str[MACROS_BUFFER_LEN_];
-RM_CHAR *macros[MACROS_PARAM_COUNT_];
+    RM_CHAR mac_str[MACROS_BUFFER_LEN_];
+    RM_CHAR *macros[MACROS_PARAM_COUNT_];
 
 #ifdef   MACROS_ESCAPE_REP_START
-enum escstate { escape_no,
-                escape_slash,
-                escape_rep,
-                escape_cont,
-                escape_cont_rep
-              } escape;
+    enum escstate { escape_no,
+                    escape_slash,
+                    escape_rep,
+                    escape_cont,
+                    escape_cont_rep
+                  } escape;
 #else
-enum escstate { escape_no,
-                escape_slash,
-                escape_cont,
-              } escape;
+    enum escstate { escape_no,
+                    escape_slash,
+                    escape_cont,
+                  } escape;
 #endif
 
 #ifdef   MACROS_SUBSTR_START
 
-RM_CHAR *stack;
-enum mstate   { macro_no,
-                macro_start,
-                macro_substr,
-                macro_sub_stop
-              } macro, bmacro;
+    RM_CHAR *stack;
+    enum mstate   { macro_no,
+                    macro_start,
+                    macro_substr,
+                    macro_sub_stop
+                  } macro, bmacro;
 
 #else
-enum mstate   { macro_no,
-                macro_start,
-              } macro;
+    enum mstate   { macro_no,
+                    macro_start,
+                  } macro;
 #endif
 
-int  maci, pari;
-int  brak;
+    int  maci, pari;
+    int  brak;
 
-enum pstate {   param_no,
-                param_start,
-                param_proc,
-                param_comma,
-                param_space
-            } st;
+    enum pstate {   param_no,
+                    param_start,
+                    param_proc,
+                    param_comma,
+                    param_space
+                } st;
 
-unsigned int val_base=0;
+    unsigned int val_base = 0;
+    unsigned int val      = 0;
+    unsigned int cur_val  = 0;
 
-register unsigned int val = 0;
-register unsigned int cur_val = 0;
+    in = *instr;
 
-    in=*instr;
-
-    st = param_no;
-    escape = escape_no;
-    macros[0] = (RM_CHAR *)parent_macros;
-    macros[1] = mac_str;
+    st          = param_no;
+    escape      = escape_no;
+    macros[0]   = (RM_CHAR *)parent_macros;
+    macros[1]   = mac_str;
     brak = maci = 0;
-    macro = macro_no;
+    macro       = macro_no;
 #ifdef   MACROS_SUBSTR_START
-    bmacro = macro;
-    stack = 0;
+    bmacro      = macro;
+    stack       = 0;
 #endif
 
 #ifdef MACROS_ALLOW_SUBMACRO
 
-    backi = 0;
+    backi   = 0;
     back[0] = 0;
 
 #endif
 
-    maci=0, pari=2;
+    maci = 0;
+    pari = 2;
 
 #ifdef MACROS_ALLOW_SUBMACRO
 
@@ -118,7 +121,7 @@ __lets_begin:
 
 #endif
 
-    for (; *in; in++){  // MAIN FOR
+    for( ; *in; in++ ) {  // MAIN FOR
 /* proccess \\ */
 
 #ifdef   MACROS_SUBSTR_START
@@ -128,7 +131,7 @@ __lets_begin:
 #endif
 
 #ifdef MACROS_ALLOW_SUBMACRO
-            if ( (*in == _al_sep) && (flags & REP_ENABLE_SUBMACRO) && !brak ) {
+            if ( (*in == al_sep) && (flags & REP_ENABLE_SUBMACRO) && !brak ) {
 
 #ifdef   MACROS_SUBSTR_START //----+
                 bmacro = macro; // |
@@ -299,35 +302,35 @@ __lets_begin:
                 case escape_rep:
 #endif
                     {
-                    switch (*in){
+                    switch (*in) {
 #ifdef MACROS_ESCAPE_BIN
                         case MACROS_ESCAPE_BIN:
                             val_base = MACROS_BIN_BASE;
-                            val = 0;
+                            val      = 0;
                             goto __proc_base;
 #endif
 #ifdef MACROS_ESCAPE_TPL
                         case MACROS_ESCAPE_TPL:
                             val_base = MACROS_TPL_BASE;
-                            val = 0;
+                            val      = 0;
                             goto __proc_base;
 #endif
 #ifdef MACROS_ESCAPE_QDR
                         case MACROS_ESCAPE_QDR:
                             val_base = MACROS_QDR_BASE;
-                            val = 0;
+                            val      = 0;
                             goto __proc_base;
 #endif
 #ifdef MACROS_ESCAPE_OCT
                         case MACROS_ESCAPE_OCT:
                             val_base = MACROS_OCT_BASE;
-                            val = 0;
+                            val      = 0;
                             goto __proc_base;
 #endif
 #ifdef MACROS_ESCAPE_HEX
                         case MACROS_ESCAPE_HEX:
                             val_base = MACROS_HEX_BASE;
-                            val = 0;
+                            val      = 0;
                             goto __proc_base;
 #endif
                         case RM_T('1'):
@@ -343,7 +346,7 @@ __lets_begin:
                         case RM_T('0'):
 #endif
                             val_base = MACROS_DEC_BASE;
-                            val = *in - RM_T('0');
+                            val      = *in - RM_T('0');
 __proc_base:
 #ifdef   MACROS_ESCAPE_REP_START
                             escape = ( (escape == escape_rep) ?
@@ -404,7 +407,7 @@ __proc_base:
 #ifdef   MACROS_ESCAPE_REP_START
             if( (escape == escape_cont) || (escape == escape_cont_rep)) {
 #else
-            if( escape == escape_cont ){
+            if( escape == escape_cont ) {
 #endif
                 switch (*in){
                 case RM_T('a'):
@@ -435,8 +438,9 @@ __proc_base:
                 case RM_T('0'):
                     cur_val = *in - RM_T('0');
 __proc_escape:
-                    if (val_base <= cur_val)
+                    if (val_base <= cur_val) {
                         goto __char_notdef;
+                    }
                     val = val * val_base + (cur_val);
                     continue;
 #ifdef   MACROS_ESCAPE_REP_START
@@ -471,12 +475,13 @@ __char_notdef:
                                     macro = macro_no;
                                     for (val = val <= MACROS_MAX_REP
                                              ? val
-                                             : MACROS_MAX_REP; val>1; val--) {
-                                        cur_val = rep_macro(stack, _al_sep,
+                                             : MACROS_MAX_REP; val>1; val--)
+                                    {
+                                        cur_val = rep_macro(stack, al_sep,
                                             &mac_str[maci],
                                             (int)(MACROS_BUFFER_LEN_ - maci),
                                             flags & ~REP_INSTR_IS_POINTER,
-                                            _al_func, _al_par);
+                                            al_func, al_par);
                                         maci += cur_val;
                                     }
                                 default:
@@ -622,7 +627,7 @@ __post_esc:
 //#endif
 
 #ifdef   MACROS_SUBSTR_START
-    if ( (*in != _al_sep) && (macro != macro_substr)){
+    if ( (*in != al_sep) && (macro != macro_substr)){
 #else
     if ( *in != _al_sep ){
 #endif
@@ -632,9 +637,9 @@ __post_esc:
                     mac_str[maci]=MACROS_END_OF_LINE;
                     macros[pari]=0;
                     if( (mc = _macro(&in,
-                        _al_sep,
-                        _al_func,
-                        _al_par,
+                        al_sep,
+                        al_func,
+                        al_par,
                         flags,
                         macros)) != 0){ // call SELF
 #ifdef MACROS_ALLOW_SUBMACRO
@@ -822,7 +827,7 @@ __default_char:                         // <----------+
 #endif  // MACROS_ESCAPE_REP_START
 
                 default:
-                    if(*in == _al_sep){
+                    if(*in == al_sep){
                         macro = macro_start;
                         break;
                     }
@@ -870,11 +875,11 @@ __default_char:                         // <----------+
                                          ? val
                                          : MACROS_MAX_REP; val>1; val--)
                                 {
-                                    cur_val = rep_macro(stack, _al_sep,
+                                    cur_val = rep_macro(stack, al_sep,
                                             &mac_str[maci],
                                             (int)(MACROS_BUFFER_LEN_ - maci),
                                             flags & ~REP_INSTR_IS_POINTER,
-                                            _al_func, _al_par);
+                                            al_func, al_par);
                                     maci += cur_val;
                                 }
                             } else {
@@ -901,11 +906,11 @@ __default_char:                         // <----------+
                 case macro_substr:
                         macro = macro_sub_stop;
                         stack = in;
-                        cur_val = rep_macro(&in, _al_sep,
+                        cur_val = rep_macro(&in, al_sep,
                                     &mac_str[maci],
                                     (int)(MACROS_BUFFER_LEN_ - maci),
                                     flags | REP_INSTR_IS_POINTER,
-                                    _al_func, _al_par);
+                                    al_func, al_par);
                         maci += cur_val;
                         if(!*in){
                             mac_str[maci] = MACROS_END_OF_LINE;
@@ -1007,11 +1012,11 @@ close_def:
                     for (val = val <= MACROS_MAX_REP
                              ? val : MACROS_MAX_REP; val>1; val--)
                     {
-                        cur_val = rep_macro(stack, _al_sep,
+                        cur_val = rep_macro(stack, al_sep,
                                   &mac_str[maci],
                                   (int)(MACROS_BUFFER_LEN_ - maci),
                                   flags & ~REP_INSTR_IS_POINTER,
-                                  _al_func, _al_par);
+                                  al_func, al_par);
                         maci += cur_val;
                     }
 
@@ -1047,7 +1052,7 @@ close_def:
             mac_str[maci] = MACROS_END_OF_LINE;
             *instr = in;
     }
-    return _al_func ? _al_func(_al_par, macros, flags) : 0;
+    return al_func ? al_func(al_par, macros, flags) : 0;
 
 #undef INCOUT
 #undef INCMACI
@@ -1058,64 +1063,64 @@ close_def:
 
 /* REP_MACRO */
 
-int rep_macro(void *instr,
-        RM_CHAR _al_sep,
-        RM_CHAR *outstr, int outlen,
-        unsigned int flags,
-        REP_MACRO_FUNC _al_func,
-        void *_al_par)
+long rep_macro( void *instr,
+                RM_CHAR al_sep,
+                RM_CHAR *outstr, long outlen,
+                unsigned int flags,
+                REP_MACRO_FUNC al_func,
+                void *al_par )
 {
 #define INCOUT (outc += (outc - outstr) < outlen-1)
 #define INCBACKI (backi += (backi < (MACROS_BACKUP_COUNT_-1)))
 #define DECBACKI (backi -= (backi > 0))
 
-RM_CHAR *inc, *outc, *mc;
+    RM_CHAR *inc;
+    RM_CHAR *outc;
+    RM_CHAR *mc;
 
 #ifdef MACROS_ALLOW_SUBMACRO
 
-RM_CHAR *back[MACROS_BACKUP_COUNT_];
-unsigned int backi;
+    RM_CHAR *back[MACROS_BACKUP_COUNT_];
+    unsigned int backi;
 
 #endif
 
 #ifdef   MACROS_SUBSTR_START
 RM_CHAR *stack;
 
-enum mstate   { macro_no,
-                macro_start,
-                macro_substr,
-                macro_sub_stop
-              } st, bst;
+    enum mstate   { macro_no,
+                    macro_start,
+                    macro_substr,
+                    macro_sub_stop
+                  } st, bst;
 #else
-enum mstate   { macro_no,
-                macro_start,
-              } st;
+    enum mstate   { macro_no,
+                    macro_start,
+                  } st;
 #endif
 
 #ifdef   MACROS_ESCAPE_REP_START
-enum escstate { escape_no,
-                escape_slash,
-                escape_rep,
-                escape_cont,
-                escape_cont_rep
-              } escape;
+    enum escstate { escape_no,
+                    escape_slash,
+                    escape_rep,
+                    escape_cont,
+                    escape_cont_rep
+                  } escape;
 #else
-enum escstate { escape_no,
-                escape_slash,
-                escape_cont,
-              } escape;
+    enum escstate { escape_no,
+                    escape_slash,
+                    escape_cont,
+                  } escape;
 
 #endif
 
-unsigned int val_base=0;
+    unsigned int val_base = 0;
+    unsigned int val      = 0;
+    unsigned int cur_val  = 0;
 
-register unsigned int val = 0;
-register unsigned int cur_val = 0;
-
-//int  n_out;
-
-    if ( !instr )
+    if ( !instr ) {
         return -1;
+    }
 
  //   n_out = (outstr!=0 && outlen!=0);
     st = macro_no;
@@ -1152,7 +1157,7 @@ rm_lets_begin:
 #ifdef   MACROS_SUBSTR_START
            if(st != macro_start && st != macro_substr){
 #ifdef MACROS_ALLOW_SUBMACRO
-                if ( (*inc == _al_sep) && (flags & REP_ENABLE_SUBMACRO)) {
+                if ( (*inc == al_sep) && (flags & REP_ENABLE_SUBMACRO)) {
                     bst = st;
                     st = macro_start;
                     continue;
@@ -1255,7 +1260,7 @@ rm_lets_begin:
                         {
 #ifdef MACROS_ALLOW_SUBMACRO  // (@@)
                         if ( !(flags & REP_ENABLE_SUBMACRO) &&
-                              (*inc == _al_sep) )
+                              (*inc == al_sep) )
                         {
 #else  // MACROS_ALLOW_SUBMACRO (@@)
                         if (*inc == _al_sep) {
@@ -1425,7 +1430,7 @@ rm_proc_escape:
 
                         default:
 rm_char_notdef:
-                            if(*inc == _al_sep){
+                            if(*inc == al_sep){
                                 st = macro_start;
                                 continue;
                             }
@@ -1459,11 +1464,11 @@ rm_char_notdef:
                                                  : MACROS_MAX_REP);
                                              val>1; val--)
                                         {
-                                            cur_val = rep_macro(stack, _al_sep,
+                                            cur_val = rep_macro(stack, al_sep,
                                                 outc,
                                                 (int)(outlen - (outc - outstr)),
                                                 flags & ~REP_INSTR_IS_POINTER,
-                                                _al_func, _al_par );
+                                                al_func, al_par );
                                             outc += cur_val;
                                         }
                                         stack = 0;
@@ -1538,7 +1543,7 @@ rm_proc_escape_stop:
             } // if(st != macro_start)
 
 #ifdef   MACROS_SUBSTR_START
-            if ( (*inc != _al_sep) && (st != macro_substr)){
+            if ( (*inc != al_sep) && (st != macro_substr)){
 #else
             if ( *inc != _al_sep ){
 
@@ -1556,9 +1561,9 @@ rm_proc_escape_stop:
                     case macro_start:   // MACROS found :) sdfsdf %!test(dfsd .)
 /*  CALL _macro */
                         if( (mc = _macro(&inc,
-                                  _al_sep,
-                                  _al_func,
-                                  _al_par,
+                                  al_sep,
+                                  al_func,
+                                  al_par,
                                   flags | REP_MACROS_WITH_BUFFER,
                                   0)) != 0) {
 #ifdef MACROS_ALLOW_SUBMACRO
@@ -1652,11 +1657,11 @@ rm_proc_escape_stop:
                     case macro_substr:
                         st = macro_sub_stop;
                         stack = inc;
-                        cur_val = rep_macro(&inc, _al_sep,
+                        cur_val = rep_macro(&inc, al_sep,
                                     outc,
                                     (int)(outlen - (outc - outstr)),
                                     flags | REP_INSTR_IS_POINTER,
-                                    _al_func, _al_par);
+                                    al_func, al_par);
                         outc += cur_val;
                         if(!*inc){
                             *outc = MACROS_END_OF_LINE;
@@ -1688,11 +1693,11 @@ rm_proc_escape_stop:
                                              ? val
                                              : MACROS_MAX_REP; val>1; val--)
                                     {
-                                        cur_val = rep_macro(stack, _al_sep,
+                                        cur_val = rep_macro(stack, al_sep,
                                               outc,
                                               (int)(outlen - (outc - outstr)),
                                               flags & ~REP_INSTR_IS_POINTER,
-                                              _al_func, _al_par);
+                                              al_func, al_par);
                                         outc += cur_val;
                                     }
                                 } else {
@@ -1800,10 +1805,10 @@ rm_proc_escape_stop:
                                  ? val
                                  : MACROS_MAX_REP; val>1; val--)
                         {
-                            cur_val = rep_macro(stack, _al_sep,
+                            cur_val = rep_macro(stack, al_sep,
                                       outc, (int)(outlen - (outc - outstr)),
                                       flags & ~REP_INSTR_IS_POINTER,
-                                      _al_func, _al_par);
+                                      al_func, al_par);
                             outc += cur_val;
                         }
                     default:
@@ -1845,13 +1850,10 @@ rm_proc_escape_stop:
     } else {
 do_without:
         for(; *inc; inc++){
-            if ( *inc != _al_sep ){
+            if ( *inc != al_sep ){
                     if (macro_start == st){
-                        _macro(&inc,
-                            _al_sep,
-                            _al_func,
-                            _al_par,
-                            flags & ~REP_MACROS_WITH_BUFFER, 0);
+                        _macro( &inc, al_sep, al_func, al_par,
+                                 flags & ~REP_MACROS_WITH_BUFFER, 0 );
                         st = macro_no;
                         if(!*inc){
                             goto exit;

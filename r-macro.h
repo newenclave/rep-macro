@@ -165,15 +165,20 @@ struct rep_header {
     RM_CHAR *params[1];
 };
 
-typedef RM_CHAR *(*REP_MACRO_FUNC) (void *, void *, unsigned int);
+typedef RM_CHAR *(*REP_MACRO_FUNC) ( void *,        /* user data */
+                                     void *,        /* header */
+                                     unsigned int   /* flags */
+                                     );
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-    int rep_macro(void *,
-                  RM_CHAR, RM_CHAR *,
-                  int, unsigned int,
-                  REP_MACRO_FUNC, void *);
+    long rep_macro( void *input,
+                    RM_CHAR separator, RM_CHAR *output,
+                    long outmax,
+                    unsigned int flags,
+                    REP_MACRO_FUNC cb_translate,
+                    void *user_data );
 #ifdef __cplusplus
 };
 #endif
