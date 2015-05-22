@@ -34,12 +34,12 @@
 
 /*   MAIN   */
 /*************************************/
-RM_CHAR *_macro( RM_CHAR        **instr,
-                 RM_CHAR          al_sep,
-                 REP_MACRO_FUNC   al_func,
-                 void            *al_par,
-                 unsigned int     flags,
-                 RM_CHAR        **parent_macros )
+const RM_CHAR *_macro( const RM_CHAR  **instr,
+                       RM_CHAR          al_sep,
+                       REP_MACRO_FUNC   al_func,
+                       void            *al_par,
+                       unsigned int     flags,
+                       RM_CHAR        **parent_macros )
 {
 
 #define INCMACI    maci  += ( maci  <   MACROS_BUFFER_LEN_   -1 )
@@ -47,10 +47,11 @@ RM_CHAR *_macro( RM_CHAR        **instr,
 #define INCBACKI ( backi += ( backi < ( MACROS_BACKUP_COUNT_ -1 ) ) )
 #define DECBACKI ( backi -= ( backi > 0 ) )
 
-    RM_CHAR *in, *mc;
+    const RM_CHAR *in;
+    const RM_CHAR *mc;
 
 #ifdef MACROS_ALLOW_SUBMACRO
-    RM_CHAR *back[MACROS_BACKUP_COUNT_];
+    const RM_CHAR *back[MACROS_BACKUP_COUNT_];
     unsigned int backi;
 #endif
 
@@ -73,7 +74,7 @@ RM_CHAR *_macro( RM_CHAR        **instr,
 
 #ifdef   MACROS_SUBSTR_START
 
-    RM_CHAR *stack;
+    const RM_CHAR *stack;
     enum mstate   { macro_no,
                     macro_start,
                     macro_substr,
@@ -1071,7 +1072,7 @@ close_def:
 
 /* REP_MACRO */
 
-long rep_macro( void *instr,
+long rep_macro( const void *instr,
                 RM_CHAR al_sep,
                 RM_CHAR *outstr, long outlen,
                 unsigned int flags,
@@ -1082,19 +1083,20 @@ long rep_macro( void *instr,
 #define INCBACKI (backi += (backi < (MACROS_BACKUP_COUNT_-1)))
 #define DECBACKI (backi -= (backi > 0))
 
-    RM_CHAR *inc;
+    const RM_CHAR *inc;
     RM_CHAR *outc;
-    RM_CHAR *mc;
+    const RM_CHAR *mc;
 
 #ifdef MACROS_ALLOW_SUBMACRO
 
-    RM_CHAR *back[MACROS_BACKUP_COUNT_];
+    const RM_CHAR *back[MACROS_BACKUP_COUNT_];
     unsigned int backi;
 
 #endif
 
 #ifdef   MACROS_SUBSTR_START
-RM_CHAR *stack;
+
+    const RM_CHAR *stack;
 
     enum mstate   { macro_no,
                     macro_start,
@@ -1568,12 +1570,11 @@ rm_proc_escape_stop:
                         break;
                     case macro_start:   // MACROS found :) sdfsdf %!test(dfsd .)
 /*  CALL _macro */
-                        if( (mc = _macro(&inc,
-                                  al_sep,
-                                  al_func,
-                                  al_par,
-                                  flags | REP_MACROS_WITH_BUFFER,
-                                  0)) != 0) {
+                        if( (mc = _macro( &inc,
+                                          al_sep, al_func, al_par,
+                                          flags | REP_MACROS_WITH_BUFFER,
+                                          0 ) ) != 0)
+                        {
 #ifdef MACROS_ALLOW_SUBMACRO
                             if ( (flags & REP_ENABLE_SUBMACRO) &&
                                  (backi < MACROS_BACKUP_COUNT_-1))
@@ -1894,7 +1895,7 @@ do_without:
         }
     }
 exit:
-    if (flags & REP_INSTR_IS_POINTER) *(RM_CHAR **)instr = inc;
+    if (flags & REP_INSTR_IS_POINTER) *(const RM_CHAR **)instr = inc;
     return (int)(outc - outstr);
 
 #undef INCOUT

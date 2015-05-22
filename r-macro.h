@@ -173,7 +173,7 @@ typedef const RM_CHAR *(*REP_MACRO_FUNC) ( void *,        /* user data */
 #ifdef __cplusplus
 extern "C" {
 #endif
-    long rep_macro( void *input,
+    long rep_macro( const void *input,
                     RM_CHAR separator, RM_CHAR *output,
                     long outmax,
                     unsigned int flags,
