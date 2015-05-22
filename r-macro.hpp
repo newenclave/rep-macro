@@ -50,13 +50,17 @@ namespace repmacro {
         }
 
         string_type         src_;
+        value_type          separator_;
         unsigned int        flags_;
         translate_function  default_;
 
     public:
 
-        rmacro( const string_type &input, unsigned int flags = flag_all )
+        rmacro( const string_type &input,
+                value_type sep,
+                unsigned int flags = flag_all )
             :src_(input)
+            ,separator_(sep)
             ,flags_(flags)
             ,default_(&this_type::def_translator)
         { }
@@ -64,6 +68,31 @@ namespace repmacro {
         const string_type &src( ) const
         {
             return src_;
+        }
+
+        void set_src( const string_type &value )
+        {
+            src_.assign( value );
+        }
+
+        unsigned int flags( ) const
+        {
+            return flags_;
+        }
+
+        void set_flags( unsigned int value )
+        {
+            flags_ = value;
+        }
+
+        value_type separator( ) const
+        {
+            return separator_;
+        }
+
+        void set_separator( value_type value )
+        {
+            separator_ = value;
         }
 
         void set_translator( translate_function value )
@@ -75,12 +104,12 @@ namespace repmacro {
             }
         }
 
-        string_type run( value_type separator, size_t maxoutput = 0 )
+        string_type run( size_t maxoutput = 0 )
         {
             if( !src_.empty( ) ) {
                 string_type out( maxoutput, 0 );
                 long res = ::rep_macro( &src_[0],
-                                         separator,
+                                         separator_,
                                          out.empty( ) ? NULL : &out[0],
                                          out.size( ),
                                          flags_,

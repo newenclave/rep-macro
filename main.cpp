@@ -2,8 +2,6 @@
 #include <map>
 #include "r-macro.hpp"
 
-
-
 namespace ph = std::placeholders;
 typedef repmacro::rmacro::value_type char_type;
 
@@ -37,10 +35,10 @@ void time_macro( const rep_header *head, std::string &result )
     struct tm * timeinfo;
     char buffer [80];
 
-    time (&rawtime);
-    timeinfo = localtime (&rawtime);
+    time( &rawtime );
+    timeinfo = localtime ( &rawtime );
 
-    strftime (buffer, 80, format, timeinfo);
+    strftime( buffer, 80, format, timeinfo );
     result = buffer;
 }
 
@@ -60,17 +58,17 @@ int main( )
 
 /* format for
 +--------------------------+
-| Current time is 11:59:03 |
+| Current time is 10:00:00 |
 +--------------------------+
 */
-    repmacro::rmacro fsm( "+-{26}+\\n"
+    repmacro::rmacro fsm( "+-{B11010}+\\n"
                           "| Current time is $time(\"%H:%M:%S\") |\\n"
-                          "+-{26}+\\n");
+                          "+-{26}+\\n", '$' );
     std::string buff;
     fsm.set_translator( std::bind( translate, ph::_1, ph::_2,
                                    std::ref( buff ),
                                    std::ref( translators ) ) );
-    std::cout << fsm.run( '$', 1024 );
+    std::cout << fsm.run( 1024 );
 
     return 0;
 }

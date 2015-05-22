@@ -83,7 +83,6 @@ typedef  char           RM_CHAR;
 #define  MACROS_ESCAPE_TPL              RM_T('T')
 
 
-
 /**********//*! REPEAT SUPPORT !*//**********/
 #if (REP_MACRO_ENABLE_REP_SUPPORT == YES)
 
