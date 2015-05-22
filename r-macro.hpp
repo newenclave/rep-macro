@@ -4,31 +4,61 @@
 #include "r-macro.h"
 #include <string>
 
+#include <functional>
+
 namespace repmacro {
+
+    enum flags {
+        flag_enable_src        = REP_ENABLE_ESC
+       ,flag_enable_repeate    = REP_ENABLE_REP
+       ,flag_enable_substrings = REP_ENABLE_SUBSTR
+       ,flag_enable_submacro   = REP_ENABLE_SUBMACRO
+       ,flag_enable_overflow   = REP_CONTINUE_ON_BUFFOVERFLOW
+       ,flag_all = flag_enable_src
+                 | flag_enable_repeate
+                 | flag_enable_substrings
+                 | flag_enable_submacro
+                 | flag_enable_overflow
+    };
 
     class rmacro {
 
-        static RM_CHAR *cb_translate( void *this_inst,
-                                      void *header,
-                                      unsigned int flags )
+        typedef rmacro this_type;
+
+    public:
+        typedef RM_CHAR                       value_type;
+        typedef std::basic_string<value_type> string_type;
+        typedef std::function<
+                const value_type * (const rep_header *, unsigned int)
+        > translate_function;
+
+    private:
+
+        static const value_type *cb_translate( void *this_inst,
+                                               void *header,
+                                               unsigned int flags )
         {
-            return static_cast<rmacro *>(this_inst)->traslate (
-                            static_cast<rep_header *>(header),
+            return static_cast<rmacro *>(this_inst)->translate (
+                            static_cast<const rep_header *>(header),
                             flags );
         }
 
-        typedef std::basic_string<RM_CHAR> string_type;
+        static const value_type *def_translator( const rep_header */*head*/,
+                                                 unsigned int      /*flags*/ )
+        {
+            return nullptr;
+        }
 
-        string_type src_;
-        unsigned int flags_;
+        string_type         src_;
+        unsigned int        flags_;
+        translate_function  default_;
 
     public:
 
-        typedef RM_CHAR value_type;
-
-        rmacro( const string_type &input, unsigned int flags )
+        rmacro( const string_type &input, unsigned int flags = flag_all )
             :src_(input)
             ,flags_(flags)
+            ,default_(&this_type::def_translator)
         { }
 
         const string_type &src( ) const
@@ -36,13 +66,25 @@ namespace repmacro {
             return src_;
         }
 
+        void set_translator( translate_function value )
+        {
+            if( value ) {
+                default_ = value;
+            } else {
+                default_ = &this_type::def_translator;
+            }
+        }
+
         string_type run( value_type separator, size_t maxoutput = 0 )
         {
             if( !src_.empty( ) ) {
                 string_type out( maxoutput, 0 );
-                long res = ::rep_macro( &src_[0], separator,
-                             out.empty( ) ? NULL : &out[0], out.size( ),
-                             -1, &rmacro::cb_translate, this );
+                long res = ::rep_macro( &src_[0],
+                                         separator,
+                                         out.empty( ) ? NULL : &out[0],
+                                         out.size( ),
+                                         flags_,
+                                         &rmacro::cb_translate, this );
                 if( -1 != res ) {
                     out.resize( res );
                     return out;
@@ -53,10 +95,10 @@ namespace repmacro {
 
     private:
 
-        virtual value_type *traslate( rep_header   */*head*/,
-                                      unsigned int  /*flags*/ )
+        virtual const value_type *translate( const rep_header *head,
+                                             unsigned int      flags )
         {
-            return NULL;
+            return default_( head, flags );
         }
 
     };

@@ -21,8 +21,16 @@
 
 #include "r-macro.h"
 
-//  RM_CHAR *_macro( RM_CHAR **, RM_CHAR, REP_MACRO_FUNC,
-//                   void *, unsigned int, RM_CHAR **);
+/*
+ * RM_CHAR *_macro( RM_CHAR **input,
+ *                   RM_CHAR separator,
+ *                   REP_MACRO_FUNC translate_callback,
+ *                   void *user_data,
+ *                   unsigned int flags,
+ *                   RM_CHAR ** parent  // parent is pointer to 'rep_header'
+ *                  );
+ *
+*/
 
 /*   MAIN   */
 /*************************************/
@@ -34,10 +42,10 @@ RM_CHAR *_macro( RM_CHAR        **instr,
                  RM_CHAR        **parent_macros )
 {
 
-#define INCMACI maci += (maci < MACROS_BUFFER_LEN_-1)
-#define INCPARI pari += (pari < (MACROS_PARAM_COUNT_-1))
-#define INCBACKI (backi += (backi < (MACROS_BACKUP_COUNT_-1)))
-#define DECBACKI (backi -= (backi > 0))
+#define INCMACI    maci  += ( maci  <   MACROS_BUFFER_LEN_   -1 )
+#define INCPARI    pari  += ( pari  < ( MACROS_PARAM_COUNT_  -1 ) )
+#define INCBACKI ( backi += ( backi < ( MACROS_BACKUP_COUNT_ -1 ) ) )
+#define DECBACKI ( backi -= ( backi > 0 ) )
 
     RM_CHAR *in, *mc;
 

@@ -19,8 +19,8 @@
 //
 //
 
-#ifndef __R_MACRO_HEADER__
-#define __R_MACRO_HEADER__
+#ifndef R_MACRO_HEADER
+#define R_MACRO_HEADER
 
 #define  YES    1
 #define  NO     0
@@ -165,10 +165,10 @@ struct rep_header {
     RM_CHAR *params[1];
 };
 
-typedef RM_CHAR *(*REP_MACRO_FUNC) ( void *,        /* user data */
-                                     void *,        /* header */
-                                     unsigned int   /* flags */
-                                     );
+typedef const RM_CHAR *(*REP_MACRO_FUNC) ( void *,        /* user data */
+                                           void *,        /* header */
+                                           unsigned int   /* flags */
+                                         );
 
 #ifdef __cplusplus
 extern "C" {
@@ -180,9 +180,9 @@ extern "C" {
                     REP_MACRO_FUNC cb_translate,
                     void *user_data );
 #ifdef __cplusplus
-};
+}
 #endif
 
-#endif /*! _R_MACRO_HEADER_ !*/
+#endif /*! R_MACRO_HEADER !*/
 
 
