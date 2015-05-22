@@ -19,20 +19,17 @@ const char_type *translate( const rep_header *head,
                             const translator_map &calls )
 {
     auto f = calls.find( head->first_name );
-    if ( f == calls.end( ) ) {
-        return nullptr;
-    } else {
-        f->second( head, buff );
-        return buff.c_str( );
-    }
+    return  f == calls.end( )
+                ?   nullptr
+                : ( f->second( head, buff ), buff.c_str( ) );
 }
 
-void test_call( const rep_header */*head*/, std::string &result )
+void test_macro( const rep_header */*head*/, std::string &result )
 {
     result = "This is a test!";
 }
 
-void time_call( const rep_header *head, std::string &result )
+void time_macro( const rep_header *head, std::string &result )
 {
     const char_type *format = head->params[0] ? head->params[0] : "%F %D";
 
@@ -50,8 +47,8 @@ void time_call( const rep_header *head, std::string &result )
 translator_map make_translators( )
 {
     translator_map res = {
-         {"test", test_call}
-        ,{"time", time_call}
+         { "test", test_macro }
+        ,{ "time", time_macro }
     };
 
     return res;
@@ -61,7 +58,14 @@ int main( )
 {
     translator_map translators = make_translators( );
 
-    repmacro::rmacro fsm( "$time(\"%H:%M:%S\")\\n" );
+/* format for
++--------------------------+
+| Current time is 11:59:03 |
++--------------------------+
+*/
+    repmacro::rmacro fsm( "+-{26}+\\n"
+                          "| Current time is $time(\"%H:%M:%S\") |\\n"
+                          "+-{26}+\\n");
     std::string buff;
     fsm.set_translator( std::bind( translate, ph::_1, ph::_2,
                                    std::ref( buff ),
