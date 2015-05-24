@@ -1613,7 +1613,7 @@ rm_proc_escape_stop:
 
                 }
 #else
-                if(st == macro_start) { // MACROS found :) sdfsdf %!test(dfsd )
+                if(st == macro_start) { // MACROS found; sdfsdf %!test(dfsd )
 /*  CALL _macro */
                     if( (mc = _macro(&inc,
                             _al_sep,
@@ -1632,7 +1632,6 @@ rm_proc_escape_stop:
 //                          back = inc + (*inc != MACROS_END_OF_LINE);
                             inc = mc;
                             st = macro_no;
-    //                      printf("fork!\n");
     //                      break;
                             goto rm_lets_begin;
                         } else {
@@ -1853,22 +1852,22 @@ rm_proc_escape_stop:
         }
 /* 2006-02-09  */
         *outc = MACROS_END_OF_LINE;
-        if(*inc && (flags & REP_CONTINUE_ON_BUFFOVERFLOW))
+        if(*inc && (flags & REP_CONTINUE_ON_BUFFOVERFLOW) ) {
             goto do_without; // not \0 in "instring" ... move forvard.
-
+        }
     } else {
 do_without:
-        for(; *inc; inc++){
-            if ( *inc != al_sep ){
-                    if (macro_start == st){
+        for(; *inc; inc++) {
+            if ( *inc != al_sep ) {
+                    if ( macro_start == st ) {
                         _macro( &inc, al_sep, al_func, al_par,
                                  flags & ~REP_MACROS_WITH_BUFFER, 0 );
                         st = macro_no;
-                        if(!*inc){
+                        if(!*inc) {
                             goto exit;
                         }
                     } else {
-                        switch (*inc){
+                        switch (*inc) {
                             case MACROS_ESCAPE:
                                 escape = (escape == escape_slash
                                                   ? escape_no

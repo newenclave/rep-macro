@@ -14,11 +14,11 @@ namespace repmacro {
        ,flag_enable_substrings = REP_ENABLE_SUBSTR
        ,flag_enable_submacro   = REP_ENABLE_SUBMACRO
        ,flag_enable_overflow   = REP_CONTINUE_ON_BUFFOVERFLOW
-       ,flag_all = flag_enable_src
-                 | flag_enable_repeate
-                 | flag_enable_substrings
-                 | flag_enable_submacro
-                 | flag_enable_overflow
+       ,flag_all               = flag_enable_src
+                               | flag_enable_repeate
+                               | flag_enable_substrings
+                               | flag_enable_submacro
+                               | flag_enable_overflow
     };
 
     class rmacro {
@@ -26,6 +26,7 @@ namespace repmacro {
         typedef rmacro this_type;
 
     public:
+
         typedef RM_CHAR                       value_type;
         typedef std::basic_string<value_type> string_type;
         typedef std::function<

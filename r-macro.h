@@ -41,7 +41,7 @@ typedef  char           RM_CHAR;
 
 #define  REP_MACRO_ENABLE_REP_SUPPORT           YES // Enabling "{...}" sequence
 #define  REP_MACRO_ENABLE_SUBSTRINGS_SUPPORT    YES // Enabling "[...]" sequence
-#define  REP_MACRO_ENABLE_SUBMACRO_SUPPORT      YES // Enabling "macros as part of template"
+#define  REP_MACRO_ENABLE_SUBMACRO_SUPPORT      YES // Enabling "submacros"
 
 #define  MACROS_PARAM_OPEN              RM_T('(')
 #define  MACROS_PARAM_CLOSE             RM_T(')')
@@ -137,19 +137,21 @@ typedef  char           RM_CHAR;
 #define  MACROS_SPACE_8                 ''
 *///Do you need more? :)
 
-#define  MACROS_PARAM_COUNT_            1+1+50+1 // parent + macro name +
-                                                 //     50 params + zero pointer = 53
-#define  MACROS_BUFFER_LEN_             4096     // for buffer in function _macro(...)
+#define  MACROS_PARAM_COUNT_            1+1+10+1 // parent + macro name
+                                                 //  + 10 params
+                                                 //  + zero pointer = 13
+#define  MACROS_BUFFER_LEN_             4096     // for buffer in function
 #define  MACROS_BACKUP_COUNT_           10       // for backcalls
 
 #define  REP_DEFAULT                    0
 #define  REP_CONTINUE_ON_BUFFOVERFLOW   1
-#define  REP_MACROS_WITH_BUFFER         (1 << 1)
-#define  REP_ENABLE_ESC                 (1 << 2)
-#define  REP_ENABLE_REP                 (1 << 3)
-#define  REP_ENABLE_SUBSTR              (1 << 4)
-#define  REP_ENABLE_SUBMACRO            (1 << 5)
-#define  REP_INSTR_IS_POINTER           (1 << 6)
+#define  REP_MACROS_WITH_BUFFER        (1 << 1)
+#define  REP_ENABLE_ESC                (1 << 2)
+#define  REP_ENABLE_REP                (1 << 3)
+#define  REP_ENABLE_SUBSTR             (1 << 4)
+#define  REP_ENABLE_SUBMACRO           (1 << 5)
+
+#define  REP_INSTR_IS_POINTER          (1 << 6) // for internal usage
 
 #define  REP_ENABLE_ALL                 REP_ENABLE_ESC | \
                                         REP_ENABLE_REP | \
