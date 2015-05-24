@@ -1195,7 +1195,7 @@ rm_lets_begin:
 //                      }
                         escape = escape_no;
                         st = macro_no;
-                        switch (*inc){
+                        switch (*inc) {
 #ifdef MACROS_ESCAPE_EMPTY
                             case MACROS_ESCAPE_EMPTY:
                                 escape = escape_no;
@@ -1244,7 +1244,7 @@ rm_lets_begin:
 #ifdef   MACROS_SUBSTR_START
                             case MACROS_SUBSTR_START:
                             case MACROS_SUBSTR_STOP:
-                                if ( !(flags & REP_ENABLE_SUBSTR)){
+                                if ( !(flags & REP_ENABLE_SUBSTR)) {
                                     *outc = MACROS_ESCAPE;
                                     INCOUT;
                                 }
@@ -1252,7 +1252,7 @@ rm_lets_begin:
 #ifdef   MACROS_ESCAPE_REP_START
                             case MACROS_ESCAPE_REP_START:
                             case MACROS_ESCAPE_REP_STOP:
-                                if ( !(flags & REP_ENABLE_REP)){
+                                if ( !(flags & REP_ENABLE_REP)) {
                                     *outc = MACROS_ESCAPE;
                                     INCOUT;
                                 }
@@ -1261,8 +1261,7 @@ rm_lets_begin:
                                 *outc = *inc;
                                 INCOUT;
                                 continue;
-
-                        }
+                        } // case *inc
                         } // case escape_slash:
 #ifdef   MACROS_ESCAPE_REP_START
                     case escape_rep:
