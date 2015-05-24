@@ -65,13 +65,13 @@ int main( )
                          "| Current time is $time(\"%H:%M:%S\") |\\n"
                          "+[--]{13}+\\n";
 
-    repmacro::rmacro fsm( '$' );
+    repmacro::rmacro macro( '$' );
     std::string buff;
-    fsm.set_translator( std::bind( translate, ph::_1, ph::_2,
+    macro.set_translator( std::bind( translate, ph::_1, ph::_2,
                                    std::ref( buff ),
                                    std::ref( translators ) ) );
 
-    std::cout << fsm.run( format, 1024 );
+    std::cout << macro.run( format, 1024 );
 
     return 0;
 }
