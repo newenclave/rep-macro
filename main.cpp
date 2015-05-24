@@ -61,9 +61,9 @@ int main( )
 | Current time is 10:00:00 |
 +--------------------------+
 */
-    const char *format = "+-{B11010}+\\n"
+    const char *format = "+-{26}+\\n"
                          "| Current time is $time(\"%H:%M:%S\") |\\n"
-                         "+-{26}+\\n";
+                         "+[--]{13}+\\n";
 
     repmacro::rmacro fsm( '$' );
     std::string buff;
