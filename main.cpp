@@ -105,7 +105,7 @@ int main( )
 +--------------------------+
 | Current time is 10:00:00 |
 +--------------------------+
-  set - make alias string
+  set - set alias string
   get - get string by alias
   len - get string length
 */
@@ -118,8 +118,8 @@ int main( )
 
     repmacro::rmacro macro( '$' );
     macro.set_translator( std::bind( translate, ph::_1, ph::_2,
-                                   std::ref( st ),
-                                   std::ref( translators ) ) );
+                                     std::ref( st ),
+                                     std::ref( translators ) ) );
 
     std::cout << macro.run( format, 1024 );
 
