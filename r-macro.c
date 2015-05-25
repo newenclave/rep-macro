@@ -1275,7 +1275,7 @@ rm_lets_begin:
                         if (*inc == _al_sep) {
 #endif
 #ifdef   MACROS_ESCAPE_REP_START
-                            *outc = ( (escape == escape_rep)
+                            *outc = ( ( escape == escape_rep )
                                       ? MACROS_ESCAPE_REP_START
                                       : MACROS_ESCAPE);
 #else
@@ -1499,7 +1499,9 @@ rm_char_notdef:
                                 }
 
 #endif
-                                if (*inc == MACROS_ESCAPE_REP_STOP) continue;
+                                if (*inc == MACROS_ESCAPE_REP_STOP) {
+                                    continue;
+                                }
 #endif // MACROS_ESCAPE_REP_START (1)
                                 default:
                                     break;
