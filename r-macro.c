@@ -1586,7 +1586,7 @@ rm_proc_escape_stop:
                                 back[backi] = (inc +
                                               (*inc != MACROS_END_OF_LINE ) );
                                 inc = mc;
-    //                          printf("fork!\n");
+    //                          printf("split!\n");
                                 st = bst;
     //                          break;
                                 goto rm_lets_begin;
