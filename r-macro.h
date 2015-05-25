@@ -45,7 +45,7 @@ typedef  char           RM_CHAR;
 
 #define  MACROS_PARAM_OPEN              RM_T('(')
 #define  MACROS_PARAM_CLOSE             RM_T(')')
-#define  MACROS_PARAM_BRACKET           RM_T('\"')
+#define  MACROS_PARAM_BRACKET           RM_T('\'')
 //#define  MACROS_PARAM_BRACKET           RM_T('<')
 //#define  MACROS_PARAM_BRACKET_CLOSE     RM_T('>')
 #define  MACROS_PARAM_COMMA             RM_T(',')
