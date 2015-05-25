@@ -94,18 +94,16 @@ namespace repmacro {
 
         string_type run( const string_type &input, size_t maxoutput = 0 )
         {
-            if( !input.empty( ) ) {
-                string_type out( maxoutput, 0 );
-                long res = ::rep_macro( &input[0],
-                                         separator_,
-                                         out.empty( ) ? NULL : &out[0],
-                                         out.size( ),
-                                         flags_,
-                                         &rmacro::cb_translate, this );
-                if( -1 != res ) {
-                    out.resize( res );
-                    return out;
-                }
+            string_type out( maxoutput, 0 );
+            long res = ::rep_macro(  input.c_str( ),
+                                     separator_,
+                                     out.empty( ) ? NULL : &out[0],
+                                     out.size( ),
+                                     flags_,
+                                     &rmacro::cb_translate, this );
+            if( -1 != res ) {
+                out.resize( res );
+                return out;
             }
             return string_type( );
         }
