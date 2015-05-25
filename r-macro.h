@@ -135,7 +135,7 @@ typedef  char           RM_CHAR;
 #define  MACROS_SPACE_6                 ''
 #define  MACROS_SPACE_7                 ''
 #define  MACROS_SPACE_8                 ''
-*///Do you need more? :)
+*///Do you need more?
 
 #define  MACROS_PARAM_COUNT_            1+1+10+1 // parent + macro name
                                                  //  + 10 params
@@ -153,8 +153,8 @@ typedef  char           RM_CHAR;
 
 #define  REP_INSTR_IS_POINTER          (1 << 6) // for internal usage
 
-#define  REP_ENABLE_ALL                 REP_ENABLE_ESC | \
-                                        REP_ENABLE_REP | \
+#define  REP_ENABLE_ALL                 REP_ENABLE_ESC    | \
+                                        REP_ENABLE_REP    | \
                                         REP_ENABLE_SUBSTR | \
                                         REP_ENABLE_SUBMACRO
 
