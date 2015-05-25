@@ -110,7 +110,7 @@ int main( )
   len - get string length
 */
     const char *format = "$set( timestr, 'Current time is '"
-                               "$time( \\'%H:%M:%S\\' ) )"
+                               "$time( '%H:%M:%S' ) )"
                          "+---{$len($get(timestr))}+\n"
                          "| $get(timestr) |\n"
                          "+---{$len($get(timestr))}+\n";
