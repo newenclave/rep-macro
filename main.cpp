@@ -57,7 +57,7 @@ void get_macro( const rep_header *head, state &result )
     }
 }
 
-void length_macro( const rep_header *head, state &result )
+void len_macro( const rep_header *head, state &result )
 {
     const char_type *name  = head->params[0];
     if( name ) {
@@ -89,7 +89,7 @@ translator_map make_translators( )
 {
     translator_map res;
 
-    res["len" ] = length_macro;
+    res["len" ] = len_macro;
     res["time"] = time_macro;
     res["set" ] = set_macro;
     res["get" ] = get_macro;
@@ -109,8 +109,8 @@ int main( )
   get - get string by alias
   len - get string length
 */
-    const char *format = "$set(timestr, 'Current time is '"
-                               "$time(\\'%H:%M:%S\\') )"
+    const char *format = "$set( timestr, 'Current time is '"
+                               "$time( \\'%H:%M:%S\\' ) )"
                          "+---{$len($get(timestr))}+\n"
                          "| $get(timestr) |\n"
                          "+---{$len($get(timestr))}+\n";
