@@ -29,7 +29,6 @@
  *                   unsigned int flags,
  *                   RM_CHAR ** parent  // parent is pointer to 'rep_header'
  *                  );
- *
 */
 
 /*   MAIN   */

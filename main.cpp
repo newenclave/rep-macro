@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 #include <sstream>
+#include "math.h"
 
 #include "r-macro.hpp"
 
@@ -109,11 +110,11 @@ int main( )
   get - get string by alias
   len - get string length
 */
-    const char *format = "$set( timestr, 'Current time is '"
-                               "$time( '%H:%M:%S' ) )"
-                         "+---{$len($get(timestr))}+\n"
+    const char *format = "$set( timestr, 'Current time is '$time('%H:%M:%S') )"
+                         "$set( timestrlen, $len($get(timestr)) )"
+                         "+--[-]{$get(timestrlen)}+\n"
                          "| $get(timestr) |\n"
-                         "+---{$len($get(timestr))}+\n";
+                         "+--[-]{$get(timestrlen)}+\n";
     state st;
 
     repmacro::rmacro macro( '$' );
